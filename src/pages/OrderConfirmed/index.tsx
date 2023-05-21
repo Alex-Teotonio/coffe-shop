@@ -2,9 +2,12 @@ import { OrderConfirmedContainer, OrderInformationDelivery , ContainerIcon, Imag
 import {MapPin, Timer, CurrencyDollar}  from 'phosphor-react';
 import {useTheme} from 'styled-components';
 import imgDelivery from '../../assets/delivery.png';
+import { useContext } from "react";
+import { CartContext } from "../../context/CartContext";
 
 export function OrderConfirmed() {
   const theme  = useTheme();
+  const {address, paymentMethod} = useContext(CartContext)
   return(
     <OrderParent>
     <OrderConfirmedContainer>
@@ -19,8 +22,8 @@ export function OrderConfirmed() {
             <MapPin />
           </ContainerIcon>
           <div className="container">
-            <span>Entrega em Rua João Daniel Martinelli, 102</span>
-            <span>Farrapos - Porto Alegre, RS</span>
+            <span>{`Entrega em Rua ${address.street}, ${address.number}`}</span>
+            <span>{`${address.neighborhood} - ${address.city}, ${address.state}`}</span>
           </div>
         </div>
 
@@ -40,7 +43,7 @@ export function OrderConfirmed() {
           </ContainerIcon>
           <div className="container">
             <span>Pagaamento na entrega</span>
-            <span>Cartão de Crédito</span>
+            <span>{paymentMethod}</span>
           </div>
         </div>
       </OrderInformationDelivery>

@@ -1,19 +1,32 @@
 import { InputQtdeCarrinho } from "./styles";
 import {useTheme} from 'styled-components';
 import {Minus, Plus} from 'phosphor-react';
+import { useContext } from "react";
+import { CartContext } from "../../context/CartContext";
 
 
 interface InputQtdeItensCarrinhoProps {
-  marginLeft: string
+  marginLeft: string,
+  selectedProduct: number,
+  qtde: number
 }
-export function InputQtdeItensCarrinho({marginLeft}: InputQtdeItensCarrinhoProps) {
-  const theme = useTheme()
+export function InputQtdeItensCarrinho({marginLeft, selectedProduct, qtde}: InputQtdeItensCarrinhoProps) {
+  const theme = useTheme();
+  const {incrementQtdeButton, decrementtQtdeButton} = useContext(CartContext)
+
+  function handleAddQtde() {
+    incrementQtdeButton(selectedProduct);
+  }
+
+  function handleDecrementQtde() {
+    decrementtQtdeButton(selectedProduct);
+  }
   return (
     
     <InputQtdeCarrinho marginLeft={marginLeft}>
-      <button><Minus color={theme['purple-200']}/></button>
-      <small>1</small>
-      <button><Plus color={theme['purple-200']}/></button>
+      <button onClick={handleDecrementQtde} ><Minus color={theme['purple-200']}/></button>
+      <small>{qtde}</small>
+      <button onClick={handleAddQtde}><Plus color={theme['purple-200']}/></button>
     </InputQtdeCarrinho>
   )
 }

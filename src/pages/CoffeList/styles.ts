@@ -6,13 +6,14 @@ export const TitlePage = styled.strong`
   margin-left:10rem;
   line-height: 1.3;
   font-size: 2rem;
-  margin-bottom: 3.375rem;
+  margin-bottom: 4.375rem;
 `
 
 export const CoffeListContainer = styled.div`
   display: flex;
   width: 70rem;
   margin: 0 10rem;
+  margin-top: 2rem;
   flex-wrap: wrap;
   gap: 2rem;
 `

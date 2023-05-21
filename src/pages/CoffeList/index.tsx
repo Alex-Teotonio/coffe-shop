@@ -6,10 +6,21 @@ import {
 } from "./styles";
 
 import {ShoppingCart} from 'phosphor-react';
-import {arrayCoffes} from './utils/dataCoffes';
 import { Introduction } from "../../components/Introduction";
 import { InputQtdeItensCarrinho } from "../../components/InputQtdeCarrinho";
+
+import { CartContext } from "../../context/CartContext";
+import { useContext } from "react";
+
 export function CoffeList() {
+
+  const {coffes, addItemCart, cart} = useContext(CartContext);
+  const arrayCoffes = coffes;
+
+  function handleAddCart(idProduct: number) {
+    addItemCart(idProduct)
+  }
+  
   return (
     <>
     <Introduction/>
@@ -26,10 +37,14 @@ export function CoffeList() {
           <p>{coffe.description}</p>
           <FooterCard>
             <p>{ new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(+coffe.price)}</p>
-            <InputQtdeItensCarrinho marginLeft="1.8125rem;"/>
-            <button className="shopping-cart">
-                <ShoppingCart color="white"/>
-              </button>
+            <InputQtdeItensCarrinho 
+              marginLeft="1.8125rem;"
+              selectedProduct={coffe.id}
+              qtde={coffe.qtde}
+            />
+            <button onClick={() =>handleAddCart(coffe.id)} className="shopping-cart">
+              <ShoppingCart color="white"/>
+            </button>
           </FooterCard>
         </CoffeCard>
       ))

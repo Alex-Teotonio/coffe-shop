@@ -21,8 +21,30 @@ import {MapPinLine,CurrencyDollar, CreditCard, Bank, Money, Trash} from 'phospho
 import { InputQtdeItensCarrinho } from "../../components/InputQtdeCarrinho";
 import { ButtonDisplayedWithIcon } from "../../components/ButtonDisplayedWithIcon";
 import { Separator } from "../../components/Separator/styles";
+import { useContext, ChangeEvent } from "react";
+import { Address, CartContext } from "../../context/CartContext";
 
 export function Checkout() {
+  const {address,cart, handlePaymentMethods, handleAddress}  = useContext(CartContext);
+  const totalValue = cart.reduce((total, item) => {
+    if(item.price) {
+      const price = parseFloat(item.price.replace(",", "."));
+      return total + price * item.qtde;
+    } return 0
+  }, 0);
+  const taxaEntrega = 3.70;
+  const totalValueFinal = totalValue+taxaEntrega;
+
+  function handleChangePaymentMethod(method: string) {
+    handlePaymentMethods(method);
+  }
+
+  function handleChangeAddress(e: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    handleAddress(name, value);
+  }
+  
+
   return (
     <CheckoutParent>
     <CheckoutContainer>
@@ -36,20 +58,21 @@ export function Checkout() {
           <span>Informe o endereço onde deseja receber seu pedido.</span>
         </ContainerAdressHeader>
         <ContainerAdressFields>
-          <Input width='200px' placeholder="CEP"></Input>
-          <Input width='100%' placeholder="Rua"></Input>
+          <Input onChange={handleChangeAddress} width="200px" placeholder="CEP" name="cep" value={address.cep} />
+          <Input onChange={handleChangeAddress} width="100%" placeholder="Rua" name="street" value={address.street} />
           <InputInline>
-            <Input width='200px' placeholder="Número"></Input>
-            <Input width="348px" placeholder="Complemento"></Input>
+            <Input onChange={handleChangeAddress} width="200px" placeholder="Número" name="number" value={address.number} />
+            <Input onChange={handleChangeAddress} width="348px" placeholder="Complemento" name="complement" value={address.complement} />
           </InputInline>
 
           <InputInline>
-            <Input width='200px' placeholder="Bairro"></Input>
-            <Input width="276px" placeholder="Cidade"></Input>
-            <Input width="60px" placeholder="UF"></Input>
+            <Input onChange={handleChangeAddress} width="200px" placeholder="Bairro" name="neighborhood" value={address.neighborhood} />
+            <Input onChange={handleChangeAddress} width="276px" placeholder="Cidade" name="city" value={address.city} />
+            <Input onChange={handleChangeAddress} width="60px" placeholder="UF" name="state" value={address.state} />
           </InputInline>
+
         </ContainerAdressFields>
-      </CheckoutAdress>
+      </CheckoutAdress> 
       <ContainerPayment>        
         <ContainerPaymentHeader>
           <CurrencyDollar/>
@@ -59,15 +82,15 @@ export function Checkout() {
           </div>
         </ContainerPaymentHeader>
         <PaymentOptions>
-            <button>
+            <button onClick={() => handleChangePaymentMethod('CARTÃO DE CRÉDITO')}>
               <CreditCard/>
               <p>CARTÃO DE CRÉDITO</p>
             </button>
-            <button>
+            <button onClick={() => handleChangePaymentMethod('CARTÃO DE DÉBITO')}>
               <Bank/>
               <p>CARTÃO DE DÉBITO</p>
               </button>
-            <button>
+            <button onClick={() => handleChangePaymentMethod('DINHEIRO')}>
               <Money/>
               <p>DINHEIRO</p>
             </button>
@@ -79,49 +102,41 @@ export function Checkout() {
     <CheckoutSubContainerItens>
       <span>Cafés selecionados</span>
       <CheckoutItensSelected>
-        <CheckoutImageProducts>
-          <img src={americano}></img>
-          <div className="coffeSelected">
-            <p>Expresso Tradicional</p>
-            <div className="actionItensSelected">
-              <InputQtdeItensCarrinho marginLeft="0"/>
-              <ButtonDisplayedWithIcon width='5.68rem' gap='0.250rem' padding='0 0.5rem'>
-                <Trash/>
-                <p>REMOVER</p>
-              </ButtonDisplayedWithIcon>
-            </div>
-          </div>
-        </CheckoutImageProducts>
-        <Separator/>
-
-        <CheckoutImageProducts>
-          <img src={americano}></img>
-          <div className="coffeSelected">
-            <p>Expresso Tradicional</p>
-            <div className="actionItensSelected">
-              <InputQtdeItensCarrinho marginLeft="0"/>
-              <ButtonDisplayedWithIcon width='5.68rem' gap='0.250rem' padding='0 0.5rem'>
-                <Trash/>
-                <p>REMOVER</p>
-              </ButtonDisplayedWithIcon>
-            </div>
-          </div>
-        </CheckoutImageProducts>
-        <Separator/>
+        {
+          cart.map((c) =>  c.id !=0 && (
+            
+            <>
+              <CheckoutImageProducts key={c.id}>
+                <img src={americano}></img>
+                <div className="coffeSelected">
+                  <p>{c.name}</p>
+                  <div className="actionItensSelected">
+                    <InputQtdeItensCarrinho marginLeft="0" selectedProduct={c.id} qtde={c.qtde}/>
+                    <ButtonDisplayedWithIcon width='5.68rem' gap='0.250rem' padding='0 0.5rem'>
+                      <Trash/>
+                      <p>REMOVER</p>
+                    </ButtonDisplayedWithIcon>
+                  </div>
+                </div>
+              </CheckoutImageProducts>
+              <Separator/>
+            </>
+          ))
+        }
         <CheckoutAmountContainer>
           <CheckoutAmountItens>
             <span className="labelAmount">Total de itens</span>
-            <span>R$ 29,70</span>
+            <span>R$ {totalValue.toFixed(2)}</span>
           </CheckoutAmountItens>
 
           <CheckoutAmountItens>
             <span className="labelAmount">Entrega</span>
-            <span>R$ 3,70</span>
+            <span>R$ {taxaEntrega.toFixed(2)}</span>
           </CheckoutAmountItens>
 
           <CheckoutAmountItens>
             <p className="labelAmountTotal">Total</p>
-            <p className="labelAmountTotal">R$ 3,70</p>
+            <p className="labelAmountTotal">R$ {totalValueFinal.toFixed(2) }</p>
           </CheckoutAmountItens>
         </CheckoutAmountContainer>
 
