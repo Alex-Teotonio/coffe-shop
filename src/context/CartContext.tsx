@@ -48,16 +48,32 @@ interface CartContexType {
 export const CartContext = createContext({} as CartContexType) ;
 export function CartContextProvider({children}:CartContextProviderProps) {
   const [coffes, setCoffes] = useState(arrayCoffes);
-  const [address, setAddress] = useState<Address>({
-    cep: '',
-    street: '',
-    number: '',
-    complement: '',
-    neighborhood: '',
-    city: '',
-    state: '',
+  const [address, setAddress] = useState<Address>(() => {
+    const storedAddressJSON = localStorage.getItem('@coffe-shop:address-1.0.0');
+  
+    if (storedAddressJSON) {
+      return JSON.parse(storedAddressJSON);
+    }
+  
+    return {
+      cep: '',
+      street: '',
+      number: '',
+      complement: '',
+      neighborhood: '',
+      city: '',
+      state: '',
+    };
   });
-  const [paymentMethod, setPaymentMethod] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState(() => {
+    const storedPaymentMethod = localStorage.getItem('@coffe-shop:paymentMethod-1.0.0');
+  
+    if (storedPaymentMethod) {
+      return storedPaymentMethod;
+    }
+  
+    return '';
+  });
   
   const [cart, dispatch] = useReducer((state:Coffe, action:ActionType) => {
     
@@ -112,6 +128,16 @@ export function CartContextProvider({children}:CartContextProviderProps) {
 
     localStorage.setItem('@coffe-shop:cart-1.0.0', stateJSON)
   }, [cart])
+
+  useEffect(() => {
+    const stateJSON = JSON.stringify(address)
+
+    localStorage.setItem('@coffe-shop:address-1.0.0', stateJSON)
+  }, [address]);
+
+  useEffect(() => {
+    localStorage.setItem('@coffe-shop:paymentMethod-1.0.0', paymentMethod);
+  }, [paymentMethod]);
 
   function incrementQtdeButton(selectProduct:number) {
     const newCoffes = coffes.map((coffe) => {

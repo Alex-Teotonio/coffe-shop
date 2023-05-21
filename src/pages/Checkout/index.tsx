@@ -43,8 +43,6 @@ export function Checkout() {
     const { name, value } = e.target;
     handleAddress(name, value);
   }
-  
-
   return (
     <CheckoutParent>
     <CheckoutContainer>
