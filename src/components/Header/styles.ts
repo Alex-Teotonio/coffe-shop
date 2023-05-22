@@ -12,7 +12,7 @@ export const HeaderContainer = styled.header `
     margin-left: 10rem ;
   }
 
-  div {
+  .container {
     display: flex;
     flex-direction: row;
     gap: 0.8571rem;
@@ -24,9 +24,9 @@ export const HeaderContainer = styled.header `
 `
 
 export const ContainerCart = styled.div `
-  height: inherit;
   width: 3.25rem;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   border-radius: 0.42rem;
@@ -54,4 +54,27 @@ export const ContainerLocation = styled.div `
     height: 1.375rem;
   }
 
+`
+
+
+export const ContainerCartValue = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  small {
+    display: flex ;
+    justify-content: center;
+    margin-left: -0.7rem;
+    align-items: center;
+    border-radius: 1000px;
+    color: white;
+    background: ${(props) => props.theme['yellow-300']};
+    margin-top: -0.5rem;
+    margin-top: -0.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
 `
