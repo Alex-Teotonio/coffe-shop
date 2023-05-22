@@ -37,14 +37,18 @@ export const CheckoutItensSelected = styled.div`
   padding: 2.5rem;
   border-radius: 3.375rem 2.75rem;
 
-  .orderConfirm {
-    background: ${(props) => props.theme['yellow-200']};
-    border-radius: 0.375;
-    width: 100%;
-    color: white;
-    padding: 0.75rem 0.5rem;
-    border-radius: 0.375rem;
-    border: none;
+  a { 
+    width: 23rem;
+    .orderConfirm {
+      width: 23rem;
+      background: ${(props) => props.theme['yellow-200']};
+      border-radius: 0.375;
+      width: 100%;
+      color: white;
+      padding: 0.75rem 0.5rem;
+      border-radius: 0.375rem;
+      border: none;
+    }
   }
 `
 
