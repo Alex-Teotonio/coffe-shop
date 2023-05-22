@@ -16,6 +16,8 @@ import {
   CheckoutAmountItens
 } from "./styles";
 
+import {NavLink} from 'react-router-dom'
+
 import americano from '../../assets/imagesList/americano.png';
 import {MapPinLine,CurrencyDollar, CreditCard, Bank, Money, Trash} from 'phosphor-react';
 import { InputQtdeItensCarrinho } from "../../components/InputQtdeCarrinho";
@@ -138,9 +140,11 @@ export function Checkout() {
           </CheckoutAmountItens>
         </CheckoutAmountContainer>
 
-        <button className="orderConfirm">
-          Confirmar Pedido
-        </button>
+        <NavLink to="/order-confirmed">
+          <button className="orderConfirm">
+            Confirmar Pedido
+          </button>
+        </NavLink>
       </CheckoutItensSelected>
     </CheckoutSubContainerItens>
   </CheckoutParent>
